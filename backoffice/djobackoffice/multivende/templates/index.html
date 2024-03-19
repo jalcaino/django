@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ventas Market Places</title>
+    {% load static %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+
+    <script>
+        function show(venta_id, field_id, numero_venta, origin, total_payment, tipo_pago, folio, sold_at, created_at, updated_at, numero_tarjeta, codigo_autorizador, delivery_code, nombre_cliente, email_cliente, procesada, in_cod_boletapagocaja, in_cod_transaccionpagocaja, in_cod_pedidobodega, in_cod_periodocaja, cliente, rut_cliente, numero_venta_acotado) {
+
+            $('#exampleModal').modal('show');
+
+            $('#venta_id').html(venta_id);
+            $('#field_id').html(field_id);
+            $('#numero_venta').html(numero_venta);
+            $('#origin').html(origin);
+            $('#total_payment').html(total_payment);
+            $('#tipo_pago').html(tipo_pago);
+            $('#folio').html(folio);
+            $('#sold_at').html(sold_at);
+            $('#created_at').html(created_at);
+            $('#updated_at').html(updated_at);
+            $('#numero_tarjeta').html(numero_tarjeta);
+            $('#codigo_autorizador').html(codigo_autorizador);
+            $('#delivery_code').html(delivery_code);
+            $('#nombre_cliente').html(nombre_cliente);
+            $('#email_cliente').html(email_cliente);
+            $('#rut_cliente').html(rut_cliente);
+            $('#procesada').html(procesada);
+            $('#in_cod_boletapagocaja').html(in_cod_boletapagocaja);
+            $('#in_cod_transaccionpagocaja').html(in_cod_transaccionpagocaja);
+            $('#in_cod_pedidobodega').html(in_cod_pedidobodega);
+            $('#in_cod_periodocaja').html(in_cod_periodocaja);
+            $('#cliente').html(cliente);
+            $('#numero_venta_acotado').html(numero_venta_acotado);
+
+
+        }
+
+        function hide() {
+            $('#exampleModal').modal('hide');;
+        }
+    </script>
+
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC&family=Poppins:wght@100;300&display=swap">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+
+    <link rel="shortcut icon" href="{% static 'images/palumbo.png' %}" />
+
+
+
+</head>
+
+<style>
+     :root {
+        --fsp-color: rgb(0, 172, 43);
+        --fsp-color-login: rgb(0, 86, 172);
+        --fsp-color-guia: rgb(25, 135, 84);
+        --salir-color: rgb(11, 134, 7);
+        --body-bg-color: rgb(241, 240, 240);
+        --whiteColor: rgba(255, 255, 255, 0.85);
+        --color1: rgb(244, 243, 243);
+        --color2: rgb(9, 95, 16);
+        --color3: rgb(49, 196, 49);
+        --color4: rgb(75, 204, 24);
+        --color5: rgb(15, 1, 1);
+    }
+    
+    body {
+        background: var(--body-bg-color);
+    }
+    
+    .dataTables_filter {
+        float: left !important;
+    }
+    
+    .FSP_be {
+        display: inline;
+        font-size: 35px;
+    }
+    
+    .top-banner {
+        background-color: var(--fsp-color);
+        height: auto;
+        text-align: center;
+        color: whitesmoke;
+        font-size: 25px;
+        padding: 10px;
+        font-weight: 600;
+        letter-spacing: 3px;
+    }
+    
+    .tablatitulos {
+        background-color: var(--fsp-color);
+        color: whitesmoke;
+    }
+    
+    .pagination>li>a:focus,
+    .pagination>li>a:hover,
+    .pagination>li>span:focus,
+    .pagination>li>span:hover {
+        color: rgb(2, 97, 41);
+        background-color: #eee;
+        border-color: #ddd;
+    }
+    
+    .pagination>.active>a {
+        color: white;
+        background-color: rgb(172, 0, 50);
+        border: solid 1px rgb(172, 0, 50);
+    }
+    
+    .pagination>.active>a:hover {
+        background-color: rgb(1, 85, 46);
+        border: solid 1px rgb(2, 117, 79);
+    }
+    
+    .pagination.active {
+        background-color: rgb(2, 73, 32);
+    }
+    
+    .page-item.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background-color: rgb(3, 88, 29);
+        border-color: rgb(4, 94, 59);
+    }
+    
+    .pagination>li>a {
+        background-color: white;
+        color: rgb(6, 97, 41);
+    }
+    
+    .pedefe {
+        background-color: transparent;
+        border: none;
+    }
+    
+    .bi-filetype-pdf {
+        color: rgb(6, 94, 35);
+    }
+    
+    .bi-filetype-pdf:hover {
+        color: rgb(27, 41, 140);
+    }
+    
+    table,
+    tr {
+        text-align: center;
+    }
+    
+    td,
+    th {
+        text-align: center;
+        font-size: 12px;
+    }
+    
+    .tituloss:hover {
+        color: rgb(31, 70, 5);
+        box-shadow: 0 0 3px black;
+        margin-top: -4px;
+    }
+    
+    .btngen {
+        background-color: rgb(1, 126, 11);
+        color: rgb(233, 219, 219);
+    }
+    
+    .btngen2 {
+        background-color: rgb(25, 219, 90);
+        color: rgb(221, 209, 209);
+    }
+</style>
+
+<body>
+    <div class="top-banner">
+        <span>VENTAS MARKETPLACES </span>
+        <div class="FSP_be">
+            <span style="font-family: 'Arial', cursive;">Palumbo</span>
+        </div>
+        <div style="text-align: right; font-size: 12px;">
+
+
+            <i class="bi bi-person"></i> {{user.get_username}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{% url 'salir' %}" class="btn tituloss "><i class="bi bi-box-arrow-right"></i> <font color="#FFFFFF">Salir</font> </a>
+
+
+        </div>
+    </div>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+
+    <div class="container">
+
+        <div id="divBotones" style="float:right">
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+
+
+        <table class="table table-striped" style="width:100%" id="tablaguias">
+
+            <thead class="tablatitulos">
+                <tr>
+
+
+                    Canal :
+                    <select id="canal" onChange="canal(this.value)">
+                        <option selected>Seleccionar Canal</option>
+                        <option value="Palumbo Online">Palumbo</option>
+                        <option value="Falabella">Falabella</option>
+                        <option value="paris">Paris</option>
+                        <option value="mercadolibre">Mercadolibre</option>
+                        <option value="ripley">Ripley</option>
+                    </select> &nbsp;&nbsp;&nbsp;
+
+
+                    <i class="bi bi-calendar-minus"></i> Fecha Venta Minima: <input type="text" id="min" name="min" style="width: 100px;">&nbsp;
+                    <i class="bi bi-calendar-minus"></i> Fecha Venta Maxima: <input type="text" id="max" name="max" style="width: 100px;">&nbsp;
+
+
+                    <button class="bi bi-arrow-clockwise btn btngen" onClick="window.location.reload();"> Limpiar Filtro </button>
+
+
+
+                </tr>
+
+
+                <tr>
+                    <th style="text-align: center;">ID Venta</th>
+                    <th style="text-align: center;">Teléfono</th>
+                    <th style="text-align: center;">Comuna</th>
+                    <th style="text-align: center;">Nombre</th>
+                    <th style="text-align: center;">Dirección</th>
+                    <th style="text-align: center;">E-Mail</th>
+                    <th style="text-align: center;">ID Interno</th>
+                    <th style="text-align: center;">Folio Boleta</th>
+                    <th style="text-align: center;">Total Compra</th>
+                    <th style="text-align: center;">PDF Boleta</th>
+                    <th style="text-align: center;">Estado</th>
+                    <th style="text-align: center;">Fecha Venta</th>
+                    <th style="text-align: center;">Canal</th>
+                    <th style="text-align: center;"><input type="checkbox" name="select_all" value="1" id="tbReporte-select-all"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in listaa %}
+                <tr>
+                    <td>{{d.numero_venta}}<button type="button" id="submit" onClick="show('{{d.venta_id}}','{{d.field_id}}','{{d.numero_venta}}','{{d.origin}}','{{d.total_payment}}','{{d.tipo_pago}}','{{d.folio}}','{{d.sold_at}}','{{d.created_at}}','{{d.updated_at}}','{{d.numero_tarjeta}}','{{d.codigo_autorizador}}','{{d.delivery_code}}','{{d.nombre_cliente}}','{{d.email_cliente}}','{{d.procesada}}','{{d.in_cod_boletapagocaja}}','{{d.in_cod_transaccionpagocaja}}','{{d.in_cod_pedidobodega}}','{{d.in_cod_periodocaja}}','{{d.cliente}}','{{d.rut_cliente}}','{{d.numero_venta_acotado}}')"
+                            class="btn btn-link"><span class="bi bi-zoom-in"></span></button></td>
+                    <td>{{d.fono}}</td>
+                    <td>{{d.comuna}}</td>
+                    <td>{{d.nombre_cliente_despacho}}</td>
+                    <td>{{d.calle}} {{d.ciudad}} {{d.numero}}</td>
+                    <td>{{d.email_cliente}}</td>
+                    <td>
+                        {{d.venta_id}}
+                    </td>
+                    <td>{{d.folio}}</td>
+                    <td>{{d.total_payment}}</td>
+                    <td>
+                        {% if d.muestralinkboleta >= 4 %}
+                        <button class="pedefe " type="button " onclick="guia( '{{d.boleta_url}}') "><i style="font-size: 20px; " class="bi bi-filetype-pdf "></i></button></div>
+    {% endif %}
+    </td>
+    <td><span class=" btn badge {{d.colorestado}} ">{{d.procesada}}</span></td>
+    <td>{{d.sold_at}}</td>
+    <td>{{d.origin}}</td>
+    <td> {% if d.muestralinkboleta >= 4 %}
+        <input type="checkbox" name="id[]" value="1"> {% endif %}
+    </td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+
+
+    <!-- INICIO MODAL -->
+    <!-- INICIO MODAL -->
+    <!-- INICIO MODAL -->
+    <!-- INICIO MODAL -->
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1 " aria-labelledby="exampleModalLabel " aria-hidden="true ">
+
+        <div class="modal-dialog  modal-dialog-scrollable modal-lg">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        DETALLE ORDEN
+                    </h5>
+
+                    <button type="button " class="close" onClick="hide()" aria-label="Close" id="close-modal">
+
+                    <span aria-hidden="true ">
+                        ×
+                    </span>
+                </button>
+                </div>
+
+                <div class="modal-body ">
+
+                    <table class="table ">
+                        <tbody>
+
+                            <tr>
+                                <th scope="row" style="text-align:left">ID INTERNO</th>
+                                <td id="venta_id"></td>
+                            </tr>
+
+
+                            <!-- <tr>
+                                <th scope="row" style="text-align:left">ID MARKETPLACE</th>
+                                <td id="numero_venta"></td>
+                            </tr> -->
+
+
+                            <tr>
+                                <th scope="row" style="text-align:left">NUMERO VENTA PARA BODEGA</th>
+                                <td id="numero_venta_acotado"></td>
+                            </tr>
+
+
+
+                            <tr>
+                                <th scope="row" style="text-align:left">ID MULTIVENDE</th>
+                                <td id="field_id"></td>
+                            </tr>
+
+
+                            <tr>
+                                <th scope="row" style="text-align:left">CANAL</th>
+                                <td id="origin"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">TOTAL COMPRA</th>
+                                <td id="total_payment"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">TIPO PAGO</th>
+                                <td id="tipo_pago"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">FOLIO BOLETA</th>
+                                <td id="folio"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">FECHA VENTA</th>
+                                <td id="sold_at"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">FECHA REGISTRO EN MULTIVENDE</th>
+                                <td id="created_at"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">FECHA ULTIMA ACTUALIZACION EN MULTIVENDE</th>
+                                <td id="updated_at"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">NUMERO TARJETA</th>
+                                <td id="numero_tarjeta"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">CODIGO AUTORIZADOR</th>
+                                <td id="codigo_autorizador"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">TIPO DESPACHO</th>
+                                <td id="delivery_code"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">NOMBRE CLIENTE</th>
+                                <td id="nombre_cliente"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">EMAIL CLIENTE</th>
+                                <td id="email_cliente"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">RUT CLIENTE</th>
+                                <td id="rut_cliente"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">ESTADO</th>
+                                <td id="procesada"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">ID CLIENTE MULTIVENDE</th>
+                                <td id="cliente"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left"></th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left"><strong>DATOS INTERNOS</strong></th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">CÓDIGO BOLETA PAGO CAJA</th>
+                                <td id="in_cod_boletapagocaja"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">CÓDIGO TRANSACCIÓN PAGO CAJA</th>
+                                <td id="in_cod_transaccionpagocaja"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">CÓDIGO PEDIDO BODEGA</th>
+                                <td id="in_cod_pedidobodega"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row" style="text-align:left">CÓDIGO PERIODO CAJA</th>
+                                <td id="in_cod_periodocaja"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- FIN MODAL -->
+        <!-- FIN MODAL -->
+        <!-- FIN MODAL -->
+
+
+
+        <script>
+            var baseurl = window.location.origin + "/";
+
+            $.extend(true, $.fn.dataTable.defaults, {
+                "language": {
+                    "decimal": ",",
+                    "thousands": ".",
+                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoPostFix": "",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "loadingRecords": "Cargando...",
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "searchPlaceholder": "Término de búsqueda",
+                    "zeroRecords": "No se encontraron resultados",
+                    "emptyTable": "Ningún dato disponible en esta tabla",
+                    "aria": {
+                        "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    //only works for built-in buttons, not for custom buttons
+                    "buttons": {
+                        "create": "Nuevo",
+                        "edit": "Cambiar",
+                        "remove": "Borrar",
+                        "copy": "Copiar",
+                        "csv": "Exportar CSV",
+                        "excel": "tabla Excel",
+                        "pdf": "documento PDF",
+                        "print": "Imprimir",
+                        "colvis": "Visibilidad columnas",
+                        "collection": "Colección",
+                        "upload": "Seleccione fichero...."
+                    },
+                    "select": {
+                        "rows": {
+                            _: '%d filas seleccionadas',
+                            0: 'clic fila para seleccionar',
+                            1: 'una fila seleccionada'
+                        }
+                    }
+                }
+            });
+
+
+
+
+
+            $('#tablaguias').dataTable({
+
+
+                responsive: true,
+                processing: true,
+
+                lengthMenu: [
+                    [10, 25, 50, 200, -1],
+                    [10, 25, 50, 200, 'Todo']
+                ],
+
+                order: [
+                    [6, 'desc']
+
+                ],
+
+
+                //dom: 'lBfrtip',
+                //dom: 'lrtip',
+                //dom: '<lf<t>ip>',
+                //dom: '<"top"i>rt<"bottom"flp><"clear">',
+                //dom: '<"toolbar">frtip',
+
+                dom: '<"wrapper"flipt>',
+
+
+                buttons: [
+                    'print', {
+                        extend: 'excel',
+                        text: 'Exportar a Excel',
+                        exportOptions: {
+                            modifier: {
+                                page: 'current'
+                            }
+                        }
+                    }, {
+                        text: '<div><i class="fas fa-print fa-1x" style="color:#931c39"></i> Exportar Boletas</div>',
+                        className: 'btn btn-light btn-sm',
+                        action: function(data, type, row) {
+                            var urls = [];
+                            $('#tablaguias').find('input[type="checkbox"]:checked').each(function() {
+
+                                var row = $(this).closest('tr');
+                                var SOLD_AT = $(row).find('td').eq(11).html();
+                                var NUMERO_VENTA = $(row).find('td').eq(0).html();
+                                var FOLIO = $(row).find('td').eq(7).html();
+
+                                urls.push(FOLIO)
+
+
+
+                            });
+                            if (urls.length > 0) {
+
+                                unirBoletasEnPDF({
+                                    urls: urls
+                                });
+
+
+                            } else {
+
+                                alert('Debes seleccionar boletas a imprimir');
+
+                            }
+
+
+                        }
+                    }
+                ],
+
+
+                "pageLength": 200,
+
+
+
+
+            });
+
+
+
+            //######### IMPRIMIR PDF ###############
+            function unirBoletasEnPDF(params) {
+
+                var UrlBoletas = baseurl + 'Boletaspdf';
+                var relativeUrl = UrlBoletas;
+                OpenWindowWithPost(relativeUrl, "width=1000, height=600, left=100, top=100, resizable=yes, scrollbars=yes", "NewFile", params.urls);
+
+            }
+
+
+            function OpenWindowWithPost(url, windowoption, name, params) {
+                var form = document.createElement("form");
+                form.setAttribute("method", "get");
+                form.setAttribute("action", url);
+                form.setAttribute("target", name);
+                var input = document.createElement('input');
+                input.name = "numero";
+                input.value = params;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                window.open("post.htm", name, windowoption);
+                form.submit();
+                document.body.removeChild(form);
+            }
+
+
+            //######### IMPRIMIR PDF ###############
+
+
+
+
+            function guia(numguia) {
+                var url = numguia
+                window.open(url, '_blank');
+            }
+
+
+            function canal(elcanal) {
+
+                var dt = $('#tablaguias').DataTable();
+                dt.column(12).search(elcanal).draw();
+
+            }
+
+
+
+
+            var minDate, maxDate;
+
+            // Custom filtering function which will search data in column four between two values
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    var min = minDate.val();
+                    var max = maxDate.val();
+                    var date = new Date(data[11]);
+
+                    if (
+                        (min === null && max === null) ||
+                        (min === null && date <= max) ||
+                        (min <= date && max === null) ||
+                        (min <= date && date <= max)
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            $(document).ready(function() {
+                // Create date inputs
+                minDate = new DateTime($('#min'), {
+                    format: 'DD-MM-YYYY'
+                });
+                maxDate = new DateTime($('#max'), {
+                    format: 'DD-MM-YYYY'
+                });
+
+                // DataTables initialisation
+                var table = $('#tablaguias').DataTable();
+
+                // Refilter the table
+
+                $('#min, #max').on('change', function() {
+                    table.draw();
+                });
+
+                $('#tablaguias').DataTable();
+
+                table.buttons().container().appendTo($('#divBotones'));
+
+
+            });
+
+
+
+
+            // Handle click on "Select all" control
+            $('#tbReporte-select-all').on('click', function() {
+                // Get all rows with search applied
+
+                var tabla_data = $('#tablaguias').DataTable();
+
+                var rows = tabla_data.rows({
+                    'search': 'applied'
+                }).nodes();
+                // Check/uncheck checkboxes for all rows in the table
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+        </script>
+
+</body>
+</body>
